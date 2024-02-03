@@ -19,6 +19,8 @@
         "checksVoidReturn": false
       }
     ],
-    "redos/no-vulnerable": "error"
-  }
+    "redos/no-vulnerable": "error",
+    "@typescript-eslint/explicit-function-return-type": "error" // 戻り値の型が明示されてないとエラー
+  },
+  "ignorePatterns": ["postcss.config.js"]
 }
