@@ -3,6 +3,7 @@
     "next/core-web-vitals",
     "eslint:recommended",
     "plugin:@typescript-eslint/strict-type-checked",
+    "plugin:tailwindcss/recommended",
     "prettier"
   ],
   "ignorePatterns": ["!**/*", ".next/**/*", ".storybook/*", "postcss.config.js", "**/*.stories.ts"],

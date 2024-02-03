@@ -11,5 +11,8 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["tailwindcss"]
+  "cSpell.words": ["tailwindcss"],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }
