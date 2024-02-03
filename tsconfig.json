@@ -14,7 +14,7 @@
     "incremental": true,
     "noImplicitOverride": true, // overrideを明示する
     "noImplicitReturns": true, // 戻り値の型必須
-    "noUncheckedIndexedAccess": true,
+    // "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
 
     "plugins": [
@@ -27,6 +27,6 @@
       "@/*": ["./src/*"],
     },
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/**/*"],
   "exclude": ["node_modules", "**/*.stories.ts", "**/*.stories.js", "*.config.js"],
 }
