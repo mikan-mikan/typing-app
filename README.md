@@ -4,7 +4,11 @@
 
 [Wiki](https://furtive-busby-e7e.notion.site/9901e2bb70924f868b87d940f8a758f4)
 
-## コマンド
+## 環境構築
+
+### Nodeバージョン
+
+v20.11.0
 
 ### インストール
 
@@ -14,7 +18,7 @@ npm run i
 
 ### 起動
 
-#### アプリ
+#### フロント
 
 ```bash
 npm run dev
