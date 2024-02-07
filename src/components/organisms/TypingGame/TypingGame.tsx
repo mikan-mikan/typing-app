@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 function TypingGame(): JSX.Element {
   const jpText = 'ここに練習用のテキストを設定';
-  const alphabetText = 'kokonirensyuuyounotekisutowosettei';
+  const alphabetText = 'kokonirensyuuyounotekisutowosettei'; // TODO: 複数の入力パターンがある場合は、複数のテキストを設定？
   const [questionText, setQuestionText] = useState(alphabetText); // 表示するテキスト
   const [userInput, setUserInput] = useState(''); // ユーザーの入力
   const [prevUserInput, setPrevUserInput] = useState(''); // 直前のユーザーの入力
