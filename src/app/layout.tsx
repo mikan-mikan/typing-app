@@ -3,6 +3,8 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { DotGothic16 } from 'next/font/google';
 
+import Footer from '@/components/organisms/Footer/Footer';
+
 const dot = DotGothic16({
   subsets: ['latin'],
   weight: '400',
@@ -20,7 +22,12 @@ export default function RootLayout({
 }>): JSX.Element {
   return (
     <html lang="ja">
-      <body className={dot.className}>{children}</body>
+      <body className={dot.className}>
+        <div className="flex min-h-screen flex-col items-center justify-between px-4 py-0">
+          <main className="flex w-full flex-1 flex-col items-center justify-center">{children}</main>
+          <Footer />
+        </div>
+      </body>
     </html>
   );
 }
