@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { CurrentScreenProvider } from '@/context/CurrentScreenContext';
+import { CurrentScreenProvider } from '@/contexts/CurrentScreenContext';
 
 type ProviderProps = {
   children: React.ReactNode;

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { CurrentScreenContext } from '@/context/CurrentScreenContext';
+import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 
 function Start(): JSX.Element {
   const current = useContext(CurrentScreenContext);

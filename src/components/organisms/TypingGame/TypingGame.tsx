@@ -2,7 +2,7 @@
 
 import React, { useContext, useState } from 'react';
 
-import { CurrentScreenContext } from '@/context/CurrentScreenContext';
+import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 
 function TypingGame(): JSX.Element {
   const jpText = 'ここに練習用のテキストを設定';

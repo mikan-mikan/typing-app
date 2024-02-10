@@ -6,7 +6,7 @@ import Result from '@/components/organisms/Result/Result';
 import Start from '@/components/organisms/Start/Start';
 import TypingGame from '@/components/organisms/TypingGame/TypingGame';
 import GameContainer from '@/components/parts/GameContainer/GameContainer';
-import { CurrentScreenContext } from '@/context/CurrentScreenContext';
+import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 
 const GameScreen = (): JSX.Element => {
   const current = useContext(CurrentScreenContext);
