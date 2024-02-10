@@ -25,7 +25,7 @@ function TypingGame(): JSX.Element {
       setIsOk(true);
 
       // newQuestionTextが空の場合は、リザルト画面に遷移
-      // TODO: かつ最後が問題だった場合を追加する
+      // TODO: かつ「最後の問題かどうか」を追加する
       if (newQuestionText === '') {
         current.setCurrentNameCo('リザルト');
       }
