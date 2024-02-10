@@ -11,6 +11,8 @@ function Start(): JSX.Element {
 
   return (
     <div>
+      <h2 className="text-center text-4xl">スタート画面</h2>
+
       <button type="button" onClick={handleStartButton}>
         スタートするボタン
       </button>
