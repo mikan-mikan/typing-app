@@ -11,12 +11,12 @@ interface ProviderProps {
 }
 
 const CurrentScreenContext = createContext<ContextType>({
-  currentNameCo: 'スタート',
+  currentNameCo: 'トップ',
   setCurrentNameCo: () => {},
 });
 
 const CurrentScreenProvider = ({ children }: ProviderProps): JSX.Element => {
-  const [currentNameCo, setCurrentNameCo] = useState<CurrentType>('スタート');
+  const [currentNameCo, setCurrentNameCo] = useState<CurrentType>('トップ');
 
   return (
     <CurrentScreenContext.Provider value={{ currentNameCo, setCurrentNameCo }}>

@@ -1,4 +1,4 @@
-export type CurrentType = 'スタート' | 'セレクト' | 'ゲーム' | 'リザルト';
+export type CurrentType = 'トップ' | 'セレクト' | 'ゲーム' | 'リザルト';
 
 export type SelectLevelType = '易しい' | '普通' | '難しい';
 
