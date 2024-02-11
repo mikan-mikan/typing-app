@@ -1,22 +1,22 @@
 import React, { createContext, ReactNode, useState } from 'react';
 
-import { currentType } from '@/types';
+import { CurrentType } from '@/types';
 
 interface ContextType {
-  currentNameCo: currentType;
-  setCurrentNameCo: (value: currentType) => void;
+  currentNameCo: CurrentType;
+  setCurrentNameCo: (value: CurrentType) => void;
 }
 interface ProviderProps {
   children: ReactNode;
 }
 
 const CurrentScreenContext = createContext<ContextType>({
-  currentNameCo: 'スタート',
+  currentNameCo: 'トップ',
   setCurrentNameCo: () => {},
 });
 
 const CurrentScreenProvider = ({ children }: ProviderProps): JSX.Element => {
-  const [currentNameCo, setCurrentNameCo] = useState<currentType>('スタート');
+  const [currentNameCo, setCurrentNameCo] = useState<CurrentType>('トップ');
 
   return (
     <CurrentScreenContext.Provider value={{ currentNameCo, setCurrentNameCo }}>

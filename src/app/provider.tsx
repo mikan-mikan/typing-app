@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+import { CourseLevelProvider } from '@/contexts/CourseLevelContext';
 import { CurrentScreenProvider } from '@/contexts/CurrentScreenContext';
 
 type ProviderProps = {
@@ -9,7 +10,11 @@ type ProviderProps = {
 };
 
 const Provider = ({ children }: ProviderProps): JSX.Element => {
-  return <CurrentScreenProvider>{children}</CurrentScreenProvider>;
+  return (
+    <CurrentScreenProvider>
+      <CourseLevelProvider>{children}</CourseLevelProvider>
+    </CurrentScreenProvider>
+  );
 };
 
 export default Provider;

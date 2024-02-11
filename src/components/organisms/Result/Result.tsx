@@ -1,21 +1,39 @@
 import { useContext } from 'react';
 
 import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
+import { CurrentType } from '@/types';
 
 function Start(): JSX.Element {
   const current = useContext(CurrentScreenContext);
 
-  function handleButton(): void {
-    current.setCurrentNameCo('スタート');
+  function goToPageButton(page: CurrentType): void {
+    current.setCurrentNameCo(page);
   }
 
   return (
     <div>
       <h2 className="text-4xl">リザルト画面</h2>
 
-      <button type="button" onClick={handleButton}>
-        TOPへ戻るボタン
-      </button>
+      <div>
+        <button
+          type="button"
+          onClick={() => {
+            goToPageButton('トップ');
+          }}
+        >
+          TOPへ戻るボタン
+        </button>
+      </div>
+      <div>
+        <button
+          type="button"
+          onClick={() => {
+            goToPageButton('セレクト');
+          }}
+        >
+          コース・難易度 選択画面へ
+        </button>
+      </div>
     </div>
   );
 }
