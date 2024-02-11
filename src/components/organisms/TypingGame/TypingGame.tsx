@@ -2,6 +2,7 @@
 
 import React, { useContext, useState } from 'react';
 
+import { CourseLevelContext } from '@/contexts/CourseLevelContext';
 import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 
 function TypingGame(): JSX.Element {
@@ -11,7 +12,9 @@ function TypingGame(): JSX.Element {
   const [userInput, setUserInput] = useState(''); // ユーザーの入力
   const [prevUserInput, setPrevUserInput] = useState(''); // 直前のユーザーの入力
   const [isOk, setIsOk] = useState(true); // ユーザーの入力が正しいかどうか
+
   const current = useContext(CurrentScreenContext);
+  const { courseCo, levelCo } = useContext(CourseLevelContext);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = event.target;
@@ -40,7 +43,10 @@ function TypingGame(): JSX.Element {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <p>{jpText}</p>
+      <p>
+        難易度: {courseCo}, コース: {levelCo}
+      </p>
+      <p className="mt-10">{jpText}</p>
       <p className="mt-4">
         <span className={isOk ? 'text-green-400' : 'text-red-400'}>{prevUserInput}</span>
         {questionText}
