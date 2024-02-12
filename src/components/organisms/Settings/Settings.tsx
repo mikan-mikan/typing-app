@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 import { CurrentType } from '@/types';
 
-function GameTop(): JSX.Element {
+function Settings(): JSX.Element {
   const current = useContext(CurrentScreenContext);
 
   function goToPageButton(page: CurrentType): void {
@@ -12,31 +12,23 @@ function GameTop(): JSX.Element {
 
   return (
     <div>
-      <h2 className="text-center text-4xl">スタート画面</h2>
+      <h2 className="text-center text-4xl">設定画面</h2>
+
+      {/* TODO: 効果音、BGM を設定 */}
 
       <div>
         <button
           type="button"
           onClick={() => {
-            goToPageButton('セレクト');
+            // TODO: 遷移前の画面に戻る、仮でトップ画面に戻る
+            goToPageButton('トップ');
           }}
         >
-          スタートする
-        </button>
-      </div>
-
-      <div>
-        <button
-          type="button"
-          onClick={() => {
-            goToPageButton('セッティング');
-          }}
-        >
-          設定画面
+          戻る
         </button>
       </div>
     </div>
   );
 }
 
-export default GameTop;
+export default Settings;
