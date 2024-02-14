@@ -41,8 +41,14 @@ function TypingGame(): JSX.Element {
     setUserInput('');
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (event.key === 'Escape') {
+      current.setCurrentNameCo('セレクト');
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center" onKeyDown={handleKeyDown}>
       <p>
         難易度: {courseCo}, コース: {levelCo}
       </p>
