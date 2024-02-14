@@ -2,10 +2,12 @@
 
 import React, { useContext, useState } from 'react';
 
+import CountDown from '@/components/parts/CountDown/CountDown';
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
 import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 
 function TypingGame(): JSX.Element {
+  const [isStart, setIsStart] = useState(false); // カウントダウンが終了してゲームが開始できる状態かどうか
   const jpText = 'ここに練習用のテキストを設定';
   const alphabetText = 'kokonirensyuuyounotekisutowosettei'; // TODO: 複数の入力パターンがある場合は、複数のテキストを設定？
   const [questionText, setQuestionText] = useState(alphabetText); // 表示するテキスト
@@ -47,25 +49,35 @@ function TypingGame(): JSX.Element {
     }
   };
 
+  const handleCountdownFinished = (): void => {
+    setIsStart(true);
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center" onKeyDown={handleKeyDown}>
-      <p>
-        難易度: {courseCo}, コース: {levelCo}
-      </p>
-      <p className="mt-10">{jpText}</p>
-      <p className="mt-4">
-        <span className={isOk ? 'text-green-400' : 'text-red-400'}>{prevUserInput}</span>
-        {questionText}
-      </p>
-      <input
-        className="mt-4"
-        type="text"
-        value={userInput}
-        onChange={handleInputChange}
-        placeholder="テキスト入力エリア"
-      />
-      {!isOk && <p className="text-red-400">Miss</p>}
-    </div>
+    <>
+      {isStart ? (
+        <div className="flex flex-col items-center justify-center" onKeyDown={handleKeyDown}>
+          <p>
+            難易度: {courseCo}, コース: {levelCo}
+          </p>
+          <p className="mt-10">{jpText}</p>
+          <p className="mt-4">
+            <span className={isOk ? 'text-green-400' : 'text-red-400'}>{prevUserInput}</span>
+            {questionText}
+          </p>
+          <input
+            className="mt-4"
+            type="text"
+            value={userInput}
+            onChange={handleInputChange}
+            placeholder="テキスト入力エリア"
+          />
+          {!isOk && <p className="text-red-400">Miss</p>}
+        </div>
+      ) : (
+        <CountDown onCountdownFinished={handleCountdownFinished} />
+      )}
+    </>
   );
 }
 
