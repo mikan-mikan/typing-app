@@ -13,7 +13,8 @@
   "dependencies": {
     "next": "14.1.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "wanakana": "^5.3.1"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.6.12",
@@ -27,6 +28,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/wanakana": "^4.0.6",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",
     "autoprefixer": "^10.0.1",
@@ -39,7 +41,7 @@
     "eslint-plugin-tailwindcss": "^3.14.1",
     "postcss": "^8",
     "prettier": "^3.2.4",
-    "storybook": "^7.6.12",
+    "storybook": "^7.6.15",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

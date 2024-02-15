@@ -11,7 +11,11 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["tailwindcss"],
+  "cSpell.words": [
+    "Romaji",
+    "tailwindcss",
+    "wanakana"
+  ],
   "files.associations": {
     "*.css": "tailwindcss"
   }
