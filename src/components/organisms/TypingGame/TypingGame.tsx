@@ -42,15 +42,10 @@ function TypingGame(): JSX.Element {
     } else {
       setIsOk(false);
 
-      // 日本語入力の場合は空にする
-      const isJaInput = checkJa.test(userInput);
-      if (isJaInput) {
-        setUserInput('');
-        return;
-      }
-
+      const isJaInput = checkJa.test(userInput); // 日本語入力かどうか
       const isLongInput = userInput.length > 2;
-      const isUserInputEmpty = isLongInput && !displayTextRomaji.startsWith(userInput);
+      const isNotMatch = !displayTextRomaji.startsWith(userInput);
+      const isUserInputEmpty = isJaInput || (isLongInput && isNotMatch);
       if (isUserInputEmpty) {
         setUserInput('');
         return;
