@@ -1,16 +1,19 @@
 'use client';
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import * as wanakana from 'wanakana';
 
 import CountDown from '@/components/parts/CountDown/CountDown';
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
 import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
+import { checkJa } from '@/functions/common';
 
 function TypingGame(): JSX.Element {
   const [isStart, setIsStart] = useState(false); // カウントダウンが終了してゲームが開始できる状態かどうか
   const jpText = 'ここに練習用のテキストを設定';
-  const alphabetText = 'kokonirensyuuyounotekisutowosettei'; // TODO: 複数の入力パターンがある場合は、複数のテキストを設定？
-  const [questionText, setQuestionText] = useState(alphabetText); // 表示するテキスト
+  const exampleTextKana = 'ここにれんしゅうようのてきすとをせってい';
+  const exampleTextRomaji = wanakana.toRomaji(exampleTextKana);
+  const [displayTextRomaji, setDisplayTextRomaji] = useState(exampleTextRomaji); // 表示するテキスト
   const [userInput, setUserInput] = useState(''); // ユーザーの入力
   const [prevUserInput, setPrevUserInput] = useState(''); // 直前のユーザーの入力
   const [isOk, setIsOk] = useState(true); // ユーザーの入力が正しいかどうか
@@ -18,40 +21,67 @@ function TypingGame(): JSX.Element {
   const current = useContext(CurrentScreenContext);
   const { courseCo, levelCo } = useContext(CourseLevelContext);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const { value } = event.target;
-    setUserInput(value);
-    setPrevUserInput(value);
+  useEffect(() => {
+    const userInputToHiragana: string = wanakana.toHiragana(userInput);
+    const displayTextToHiragana: string = wanakana.toHiragana(displayTextRomaji);
+    const isInputOK = displayTextToHiragana.startsWith(userInputToHiragana);
 
-    // ユーザーの入力を判定
-    if (questionText.startsWith(value)) {
-      // alphabetTextの先頭の文字を削除
-      const newQuestionText = questionText.slice(1);
-      setIsOk(true);
+    if (isInputOK) {
+      const remainingText = removeMatchingPrefix(displayTextToHiragana, userInputToHiragana);
+      const remainingTextToRomaji = wanakana.toRomaji(remainingText);
+      const isFinished = remainingTextToRomaji.length === 0;
 
-      // newQuestionTextが空の場合は、リザルト画面に遷移
-      // TODO: かつ「最後の問題かどうか」を追加する
-      if (newQuestionText === '') {
+      // TODO: 最後の問題で、残りの文字がなくなったらゲーム終了, リザルト画面に遷移
+      if (isFinished) {
         current.setCurrentNameCo('リザルト');
       }
 
-      setQuestionText(newQuestionText);
+      setUserInput('');
+      setDisplayTextRomaji(remainingTextToRomaji);
+      setIsOk(true);
     } else {
       setIsOk(false);
+
+      // 日本語入力の場合は空にする
+      const isJaInput = checkJa.test(userInput);
+      if (isJaInput) {
+        setUserInput('');
+        return;
+      }
+
+      const isLongInput = userInput.length > 2;
+      const isUserInputEmpty = isLongInput && !displayTextRomaji.startsWith(userInput);
+      if (isUserInputEmpty) {
+        setUserInput('');
+        return;
+      }
     }
+  }, [current, userInput]);
 
-    setUserInput('');
-  };
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    const { value } = event.target;
+    setUserInput(value);
+    setPrevUserInput(value);
+  }
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === 'Escape') {
       current.setCurrentNameCo('セレクト');
     }
-  };
+  }
 
-  const handleCountdownFinished = (): void => {
+  function handleCountdownFinished(): void {
     setIsStart(true);
-  };
+  }
+
+  // 入力された文字列とパターンを比較し、一致する部分を削除した文字列を返す
+  function removeMatchingPrefix(input: string, pattern: string): string {
+    let index = 0;
+    while (index < input.length && index < pattern.length && input[index] === pattern[index]) {
+      index++;
+    }
+    return input.substring(index);
+  }
 
   return (
     <>
@@ -63,7 +93,7 @@ function TypingGame(): JSX.Element {
           <p className="mt-10">{jpText}</p>
           <p className="mt-4">
             <span className={isOk ? 'text-green-400' : 'text-red-400'}>{prevUserInput}</span>
-            {questionText}
+            {displayTextRomaji}
           </p>
           <input
             className="mt-4"
