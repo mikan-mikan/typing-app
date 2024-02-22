@@ -7,19 +7,26 @@ import CountDown from '@/components/parts/CountDown/CountDown';
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
 import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 import { checkJa } from '@/functions/common';
+import { selectQuestLists } from '@/functions/selectQuestLists';
 
 function TypingGame(): JSX.Element {
   const [isStart, setIsStart] = useState(false); // カウントダウンが終了してゲームが開始できる状態かどうか
-  const jpText = 'ここに練習用のテキストを設定';
-  const exampleTextKana = 'ここにれんしゅうようのてきすとをせってい';
-  const exampleTextRomaji = wanakana.toRomaji(exampleTextKana);
-  const [displayTextRomaji, setDisplayTextRomaji] = useState(exampleTextRomaji); // 表示するテキスト
   const [userInput, setUserInput] = useState(''); // ユーザーの入力
   const [prevUserInput, setPrevUserInput] = useState(''); // 直前のユーザーの入力
   const [isOk, setIsOk] = useState(true); // ユーザーの入力が正しいかどうか
 
   const current = useContext(CurrentScreenContext);
   const { courseCo, levelCo } = useContext(CourseLevelContext);
+
+  // 表示する問題
+  const jpText = 'ここに練習用のテキストを設定';
+  const exampleTextKana = 'ここにれんしゅうようのてきすとをせってい';
+  const exampleTextRomaji = wanakana.toRomaji(exampleTextKana);
+  const [displayTextRomaji, setDisplayTextRomaji] = useState(exampleTextRomaji); // 表示するテキスト
+
+  // TODO: 問題取得テスト
+  const questionList = selectQuestLists(courseCo, levelCo);
+  console.log(questionList);
 
   useEffect(() => {
     const userInputToHiragana: string = wanakana.toHiragana(userInput);
