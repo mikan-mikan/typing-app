@@ -6,8 +6,8 @@ import * as wanakana from 'wanakana';
 import CountDown from '@/components/parts/CountDown/CountDown';
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
 import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
+import { QuestionListContext } from '@/contexts/QuestionListContext';
 import { checkJa } from '@/functions/common';
-import { selectQuestLists } from '@/functions/selectQuestLists';
 
 function TypingGame(): JSX.Element {
   const [isStart, setIsStart] = useState(false); // カウントダウンが終了してゲームが開始できる状態かどうか
@@ -15,18 +15,15 @@ function TypingGame(): JSX.Element {
   const [prevUserInput, setPrevUserInput] = useState(''); // 直前のユーザーの入力
   const [isOk, setIsOk] = useState(true); // ユーザーの入力が正しいかどうか
 
-  const current = useContext(CurrentScreenContext);
+  const { setCurrentNameCo } = useContext(CurrentScreenContext);
   const { courseCo, levelCo } = useContext(CourseLevelContext);
+  const { questionListCo } = useContext(QuestionListContext); // 作成した問題のリスト
 
   // 表示する問題
   const jpText = 'ここに練習用のテキストを設定';
   const exampleTextKana = 'ここにれんしゅうようのてきすとをせってい';
   const exampleTextRomaji = wanakana.toRomaji(exampleTextKana);
   const [displayTextRomaji, setDisplayTextRomaji] = useState(exampleTextRomaji); // 表示するテキスト
-
-  // TODO: 問題取得テスト
-  const questionList = selectQuestLists(courseCo, levelCo);
-  console.log(questionList);
 
   useEffect(() => {
     const userInputToHiragana: string = wanakana.toHiragana(userInput);
@@ -40,7 +37,7 @@ function TypingGame(): JSX.Element {
 
       // TODO: 最後の問題で、残りの文字がなくなったらゲーム終了, リザルト画面に遷移
       if (isFinished) {
-        current.setCurrentNameCo('リザルト');
+        setCurrentNameCo('リザルト');
       }
 
       setUserInput('');
@@ -58,7 +55,7 @@ function TypingGame(): JSX.Element {
         return;
       }
     }
-  }, [current, userInput]);
+  }, [setCurrentNameCo, userInput]);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const { value } = event.target;
@@ -68,7 +65,7 @@ function TypingGame(): JSX.Element {
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === 'Escape') {
-      current.setCurrentNameCo('セレクト');
+      setCurrentNameCo('セレクト');
     }
   }
 
