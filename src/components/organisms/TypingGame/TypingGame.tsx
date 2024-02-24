@@ -10,20 +10,21 @@ import { QuestionListContext } from '@/contexts/QuestionListContext';
 import { checkJa } from '@/functions/common';
 
 function TypingGame(): JSX.Element {
+  const { setCurrentNameCo } = useContext(CurrentScreenContext);
+  const { courseCo, levelCo } = useContext(CourseLevelContext);
+  const { questionListCo } = useContext(QuestionListContext); // 作成した問題のリスト
+
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // 現在の問題のインデックス
   const [isStart, setIsStart] = useState(false); // カウントダウンが終了してゲームが開始できる状態かどうか
   const [userInput, setUserInput] = useState(''); // ユーザーの入力
   const [prevUserInput, setPrevUserInput] = useState(''); // 直前のユーザーの入力
   const [isOk, setIsOk] = useState(true); // ユーザーの入力が正しいかどうか
 
-  const { setCurrentNameCo } = useContext(CurrentScreenContext);
-  const { courseCo, levelCo } = useContext(CourseLevelContext);
-  const { questionListCo } = useContext(QuestionListContext); // 作成した問題のリスト
-
   // 表示する問題
-  const jpText = 'ここに練習用のテキストを設定';
-  const exampleTextKana = 'ここにれんしゅうようのてきすとをせってい';
-  const exampleTextRomaji = wanakana.toRomaji(exampleTextKana);
-  const [displayTextRomaji, setDisplayTextRomaji] = useState(exampleTextRomaji); // 表示するテキスト
+  const displayTextKanji = questionListCo[currentQuestionIndex].kanji; // 漢字で問題を表示
+  const listOriginalTextKana = questionListCo[currentQuestionIndex].kana;
+  const listOriginalTextKanaToRomaji = wanakana.toRomaji(listOriginalTextKana);
+  const [displayTextRomaji, setDisplayTextRomaji] = useState(listOriginalTextKanaToRomaji); // ローマ字の残りの文字列を表示
 
   useEffect(() => {
     const userInputToHiragana: string = wanakana.toHiragana(userInput);
@@ -33,15 +34,23 @@ function TypingGame(): JSX.Element {
     if (isInputOK) {
       const remainingText = removeMatchingPrefix(displayTextToHiragana, userInputToHiragana);
       const remainingTextToRomaji = wanakana.toRomaji(remainingText);
-      const isFinished = remainingTextToRomaji.length === 0;
+      const isLastChar = remainingTextToRomaji.length === 0;
+      const isLastQuestion = currentQuestionIndex === questionListCo.length - 1;
+      const isFinished = isLastChar && isLastQuestion;
 
-      // TODO: 最後の問題で、残りの文字がなくなったらゲーム終了, リザルト画面に遷移
       if (isFinished) {
+        // 終了
         setCurrentNameCo('リザルト');
+      } else if (isLastChar) {
+        // 次の問題へ進む
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setUserInput('');
+        setDisplayTextRomaji(questionListCo[currentQuestionIndex + 1].kana);
+      } else {
+        // 次の入力へ進む
+        setUserInput('');
+        setDisplayTextRomaji(remainingTextToRomaji);
       }
-
-      setUserInput('');
-      setDisplayTextRomaji(remainingTextToRomaji);
       setIsOk(true);
     } else {
       setIsOk(false);
@@ -89,7 +98,7 @@ function TypingGame(): JSX.Element {
           <p>
             難易度: {courseCo}, コース: {levelCo}
           </p>
-          <p className="mt-10">{jpText}</p>
+          <p className="mt-10">{displayTextKanji}</p>
           <p className="mt-4">
             <span className={isOk ? 'text-green-400' : 'text-red-400'}>{prevUserInput}</span>
             {displayTextRomaji}
