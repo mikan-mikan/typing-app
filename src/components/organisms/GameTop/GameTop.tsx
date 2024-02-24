@@ -4,10 +4,10 @@ import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 import { CurrentType } from '@/types';
 
 function GameTop(): JSX.Element {
-  const current = useContext(CurrentScreenContext);
+  const { setCurrentNameCo } = useContext(CurrentScreenContext);
 
   function goToPageButton(page: CurrentType): void {
-    current.setCurrentNameCo(page);
+    setCurrentNameCo(page);
   }
 
   return (

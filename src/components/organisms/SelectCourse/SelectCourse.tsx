@@ -7,14 +7,14 @@ import { selectQuestLists } from '@/functions/selectQuestLists';
 import type { CurrentType, SelectCourseType, SelectLevelType } from '@/types';
 
 function SelectCourse(): JSX.Element {
-  const current = useContext(CurrentScreenContext);
+  const { setCurrentNameCo } = useContext(CurrentScreenContext);
   const { courseCo, setCourseCo, levelCo, setLevelCo } = useContext(CourseLevelContext);
   const { setQuestionListCo } = useContext(QuestionListContext);
   const courses: SelectCourseType[] = ['単語', '文章'];
   const levels: SelectLevelType[] = ['易しい', '普通', '難しい'];
 
   function goToPageButton(page: CurrentType): void {
-    current.setCurrentNameCo(page);
+    setCurrentNameCo(page);
   }
 
   function updateSelectCourse(course: SelectCourseType): void {
