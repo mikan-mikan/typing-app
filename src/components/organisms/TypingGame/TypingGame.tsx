@@ -45,6 +45,7 @@ function TypingGame(): JSX.Element {
         // 次の問題へ進む
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setUserInput('');
+        setPrevUserInput('');
         setDisplayTextRomaji(questionListCo[currentQuestionIndex + 1].kana);
       } else {
         // 次の入力へ進む
