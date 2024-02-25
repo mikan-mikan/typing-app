@@ -5,8 +5,8 @@ import { ScoreMessageProps, ScoreMissProps } from '@/types';
 interface ContextType {
   elapsedTimeCo: number;
   setElapsedTimeCo: (value: number) => void;
-  missObjectCo: ScoreMissProps;
-  setMissObjectCo: (value: ScoreMissProps) => void;
+  missCo: number;
+  setMissCo: (value: number) => void;
   totalTimeCo: number;
   setTotalTimeCo: (value: number) => void;
   scoreObjectCo: ScoreMessageProps;
@@ -19,11 +19,8 @@ interface ProviderProps {
 const ScoreContext = createContext<ContextType>({
   elapsedTimeCo: 0,
   setElapsedTimeCo: () => {},
-  missObjectCo: {
-    missCount: 0,
-    missTime: 0,
-  },
-  setMissObjectCo: () => {},
+  missCo: 0,
+  setMissCo: () => {},
   totalTimeCo: 0,
   setTotalTimeCo: () => {},
   scoreObjectCo: {
@@ -37,11 +34,8 @@ const ScoreProvider = ({ children }: ProviderProps): JSX.Element => {
   // 経過時間 (秒)
   const [elapsedTimeCo, setElapsedTimeCo] = useState<number>(0);
 
-  // ミス回数、ミス秒数
-  const [missObjectCo, setMissObjectCo] = useState<ScoreMissProps>({
-    missCount: 0,
-    missTime: 0,
-  });
+  // ミス回数
+  const [missCo, setMissCo] = useState<number>(0);
 
   // 合計秒数
   const [totalTimeCo, setTotalTimeCo] = useState<number>(0);
@@ -57,8 +51,8 @@ const ScoreProvider = ({ children }: ProviderProps): JSX.Element => {
       value={{
         elapsedTimeCo,
         setElapsedTimeCo,
-        missObjectCo,
-        setMissObjectCo,
+        missCo,
+        setMissCo,
         totalTimeCo,
         setTotalTimeCo,
         scoreObjectCo,

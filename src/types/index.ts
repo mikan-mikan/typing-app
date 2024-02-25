@@ -23,9 +23,3 @@ export type ScoreMessageProps = {
   score: ScoreProps | '';
   message: string;
 };
-
-// ミス回数,秒数の型
-export type ScoreMissProps = {
-  missCount: number;
-  missTime: number;
-};
