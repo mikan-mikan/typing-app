@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState } from 'react';
+import React, { createContext, ReactNode, useCallback, useState } from 'react';
 
 import { ScoreMessageProps } from '@/types';
 
@@ -49,12 +49,12 @@ const ScoreProvider = ({ children }: ProviderProps): JSX.Element => {
   });
 
   // 状態リセット用
-  function resetScoreContext(): void {
+  const resetScoreContext = useCallback(() => {
     setElapsedTimeCo(0);
     setMissCo(0);
     setTotalTimeCo(0);
     setScoreObjectCo({ score: '', message: '' });
-  }
+  }, []);
 
   return (
     <ScoreContext.Provider
