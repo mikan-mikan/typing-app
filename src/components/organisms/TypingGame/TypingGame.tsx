@@ -6,27 +6,29 @@ import * as wanakana from 'wanakana';
 import CountDown from '@/components/parts/CountDown/CountDown';
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
 import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
+import { QuestionListContext } from '@/contexts/QuestionListContext';
+import { ScoreContext } from '@/contexts/ScoreContext';
 import { checkJa } from '@/functions/common';
-import { selectQuestLists } from '@/functions/selectQuestLists';
+import useGameTimer from '@/hooks/useGameTimer';
 
 function TypingGame(): JSX.Element {
+  const { setCurrentNameCo } = useContext(CurrentScreenContext);
+  const { courseCo, levelCo } = useContext(CourseLevelContext);
+  const { questionListCo } = useContext(QuestionListContext); // 作成した問題のリスト
+  const { missCo, setMissCo } = useContext(ScoreContext);
+  const { elapsedTime, startGameTimer, stopGameTimer } = useGameTimer(); // ゲームの経過時間
+
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // 現在の問題のインデックス
   const [isStart, setIsStart] = useState(false); // カウントダウンが終了してゲームが開始できる状態かどうか
   const [userInput, setUserInput] = useState(''); // ユーザーの入力
   const [prevUserInput, setPrevUserInput] = useState(''); // 直前のユーザーの入力
   const [isOk, setIsOk] = useState(true); // ユーザーの入力が正しいかどうか
 
-  const current = useContext(CurrentScreenContext);
-  const { courseCo, levelCo } = useContext(CourseLevelContext);
-
   // 表示する問題
-  const jpText = 'ここに練習用のテキストを設定';
-  const exampleTextKana = 'ここにれんしゅうようのてきすとをせってい';
-  const exampleTextRomaji = wanakana.toRomaji(exampleTextKana);
-  const [displayTextRomaji, setDisplayTextRomaji] = useState(exampleTextRomaji); // 表示するテキスト
-
-  // TODO: 問題取得テスト
-  const questionList = selectQuestLists(courseCo, levelCo);
-  console.log(questionList);
+  const displayTextKanji = questionListCo[currentQuestionIndex].kanji; // 漢字で問題を表示
+  const listOriginalTextKana = questionListCo[currentQuestionIndex].kana;
+  const listOriginalTextKanaToRomaji = wanakana.toRomaji(listOriginalTextKana);
+  const [displayTextRomaji, setDisplayTextRomaji] = useState(listOriginalTextKanaToRomaji); // ローマ字の残りの文字列を表示
 
   useEffect(() => {
     const userInputToHiragana: string = wanakana.toHiragana(userInput);
@@ -36,18 +38,36 @@ function TypingGame(): JSX.Element {
     if (isInputOK) {
       const remainingText = removeMatchingPrefix(displayTextToHiragana, userInputToHiragana);
       const remainingTextToRomaji = wanakana.toRomaji(remainingText);
-      const isFinished = remainingTextToRomaji.length === 0;
+      const isLastChar = remainingTextToRomaji.length === 0;
+      const isLastQuestion = currentQuestionIndex === questionListCo.length - 1;
+      const isFinished = isLastChar && isLastQuestion;
 
-      // TODO: 最後の問題で、残りの文字がなくなったらゲーム終了, リザルト画面に遷移
       if (isFinished) {
-        current.setCurrentNameCo('リザルト');
-      }
+        // 終了
+        // 時間計測を停止
+        stopGameTimer();
 
-      setUserInput('');
-      setDisplayTextRomaji(remainingTextToRomaji);
+        // TODO: 時間を記録する
+        console.log('計測停止 時間', elapsedTime);
+
+        setCurrentNameCo('リザルト');
+      } else if (isLastChar) {
+        // 次の問題へ進む
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+        setUserInput('');
+        setPrevUserInput('');
+        setDisplayTextRomaji(questionListCo[currentQuestionIndex + 1].kana);
+      } else {
+        // 次の入力へ進む
+        setUserInput('');
+        setDisplayTextRomaji(remainingTextToRomaji);
+      }
       setIsOk(true);
     } else {
       setIsOk(false);
+
+      // TODO: ミスの条件を変更する必要がある
+      setMissCo(missCo + 1);
 
       const isJaInput = checkJa.test(userInput); // 日本語入力かどうか
       const isLongInput = userInput.length > 2;
@@ -58,7 +78,15 @@ function TypingGame(): JSX.Element {
         return;
       }
     }
-  }, [current, userInput]);
+  }, [setCurrentNameCo, userInput]);
+
+  useEffect(() => {
+    if (!isStart) {
+      return;
+    }
+    // 時間計測を開始
+    startGameTimer();
+  }, [isStart]);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const { value } = event.target;
@@ -68,7 +96,7 @@ function TypingGame(): JSX.Element {
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === 'Escape') {
-      current.setCurrentNameCo('セレクト');
+      setCurrentNameCo('セレクト');
     }
   }
 
@@ -92,7 +120,7 @@ function TypingGame(): JSX.Element {
           <p>
             難易度: {courseCo}, コース: {levelCo}
           </p>
-          <p className="mt-10">{jpText}</p>
+          <p className="mt-10">{displayTextKanji}</p>
           <p className="mt-4">
             <span className={isOk ? 'text-green-400' : 'text-red-400'}>{prevUserInput}</span>
             {displayTextRomaji}

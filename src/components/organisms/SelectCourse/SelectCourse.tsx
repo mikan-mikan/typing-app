@@ -2,16 +2,21 @@ import { useContext } from 'react';
 
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
 import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
+import { QuestionListContext } from '@/contexts/QuestionListContext';
+import { ScoreContext } from '@/contexts/ScoreContext';
+import { selectQuestLists } from '@/functions/selectQuestLists';
 import type { CurrentType, SelectCourseType, SelectLevelType } from '@/types';
 
 function SelectCourse(): JSX.Element {
-  const current = useContext(CurrentScreenContext);
+  const { setCurrentNameCo } = useContext(CurrentScreenContext);
   const { courseCo, setCourseCo, levelCo, setLevelCo } = useContext(CourseLevelContext);
+  const { setQuestionListCo } = useContext(QuestionListContext);
+  const { resetScoreContext } = useContext(ScoreContext);
   const courses: SelectCourseType[] = ['単語', '文章'];
   const levels: SelectLevelType[] = ['易しい', '普通', '難しい'];
 
   function goToPageButton(page: CurrentType): void {
-    current.setCurrentNameCo(page);
+    setCurrentNameCo(page);
   }
 
   function updateSelectCourse(course: SelectCourseType): void {
@@ -64,6 +69,10 @@ function SelectCourse(): JSX.Element {
         <button
           type="button"
           onClick={() => {
+            // 問題作成後に、ゲーム画面へ遷移
+            const questionList = selectQuestLists(courseCo, levelCo);
+            setQuestionListCo(questionList);
+            resetScoreContext();
             goToPageButton('ゲーム');
           }}
         >
