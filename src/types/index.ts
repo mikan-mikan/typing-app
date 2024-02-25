@@ -14,3 +14,18 @@ export type QuestionType = {
   kanji: string;
   kana: string;
 };
+
+// スコアの型
+export type ScoreProps = 'VeryFast' | 'Fast' | 'Normal' | 'Slow' | 'VerySlow';
+
+// スコアとメッセージの型
+export type ScoreMessageProps = {
+  score: ScoreProps | '';
+  message: string;
+};
+
+// ミス回数,秒数の型
+export type ScoreMissProps = {
+  missCount: number;
+  missTime: number;
+};
