@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useState } from 'react';
 
-import { ScoreMessageProps, ScoreMissProps } from '@/types';
+import { ScoreMessageProps } from '@/types';
 
 interface ContextType {
   elapsedTimeCo: number;
@@ -11,6 +11,7 @@ interface ContextType {
   setTotalTimeCo: (value: number) => void;
   scoreObjectCo: ScoreMessageProps;
   setScoreObjectCo: (value: ScoreMessageProps) => void;
+  resetScoreContext: () => void;
 }
 interface ProviderProps {
   children: ReactNode;
@@ -28,6 +29,7 @@ const ScoreContext = createContext<ContextType>({
     message: '',
   },
   setScoreObjectCo: () => {},
+  resetScoreContext: () => {},
 });
 
 const ScoreProvider = ({ children }: ProviderProps): JSX.Element => {
@@ -46,6 +48,14 @@ const ScoreProvider = ({ children }: ProviderProps): JSX.Element => {
     message: '',
   });
 
+  // 状態リセット用
+  function resetScoreContext(): void {
+    setElapsedTimeCo(0);
+    setMissCo(0);
+    setTotalTimeCo(0);
+    setScoreObjectCo({ score: '', message: '' });
+  }
+
   return (
     <ScoreContext.Provider
       value={{
@@ -57,6 +67,7 @@ const ScoreProvider = ({ children }: ProviderProps): JSX.Element => {
         setTotalTimeCo,
         scoreObjectCo,
         setScoreObjectCo,
+        resetScoreContext,
       }}
     >
       {children}

@@ -7,12 +7,14 @@ import CountDown from '@/components/parts/CountDown/CountDown';
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
 import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 import { QuestionListContext } from '@/contexts/QuestionListContext';
+import { ScoreContext } from '@/contexts/ScoreContext';
 import { checkJa } from '@/functions/common';
 
 function TypingGame(): JSX.Element {
   const { setCurrentNameCo } = useContext(CurrentScreenContext);
   const { courseCo, levelCo } = useContext(CourseLevelContext);
   const { questionListCo } = useContext(QuestionListContext); // 作成した問題のリスト
+  const { missCo, setMissCo } = useContext(ScoreContext);
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // 現在の問題のインデックス
   const [isStart, setIsStart] = useState(false); // カウントダウンが終了してゲームが開始できる状態かどうか
@@ -40,6 +42,8 @@ function TypingGame(): JSX.Element {
 
       if (isFinished) {
         // 終了
+        // TODO: 経過時間を停止・記録する
+        console.log('計測停止');
         setCurrentNameCo('リザルト');
       } else if (isLastChar) {
         // 次の問題へ進む
@@ -56,6 +60,9 @@ function TypingGame(): JSX.Element {
     } else {
       setIsOk(false);
 
+      // TODO: ミスの条件を変更する必要がある
+      setMissCo(missCo + 1);
+
       const isJaInput = checkJa.test(userInput); // 日本語入力かどうか
       const isLongInput = userInput.length > 2;
       const isNotMatch = !displayTextRomaji.startsWith(userInput);
@@ -66,6 +73,12 @@ function TypingGame(): JSX.Element {
       }
     }
   }, [setCurrentNameCo, userInput]);
+
+  useEffect(() => {
+    if (!isStart) return;
+    // TODO: 時間計測を開始する
+    console.log('計測開始');
+  }, [isStart]);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
     const { value } = event.target;
