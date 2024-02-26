@@ -22,3 +22,12 @@ export const SCORE_MESSAGE_LIST: ScoreMessageProps[] = [
     message: 'もっと頑張ろう！',
   },
 ];
+
+// ミスペナルティの秒数
+export const SCORE_MISS_PENALTY = 2;
+
+// スコア判定の秒数
+export const SCORE_VERY_FAST = 70;
+export const SCORE_FAST = 80;
+export const SCORE_NORMAL = 90;
+export const SCORE_SLOW = 100;

@@ -15,7 +15,7 @@ function TypingGame(): JSX.Element {
   const { setCurrentNameCo } = useContext(CurrentScreenContext);
   const { courseCo, levelCo } = useContext(CourseLevelContext);
   const { questionListCo } = useContext(QuestionListContext); // 作成した問題のリスト
-  const { missCo, setMissCo } = useContext(ScoreContext);
+  const { missCo, setMissCo, updateScoreCo } = useContext(ScoreContext);
   const { elapsedTime, startGameTimer, stopGameTimer } = useGameTimer(); // ゲームの経過時間
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // 現在の問題のインデックス
@@ -44,12 +44,8 @@ function TypingGame(): JSX.Element {
 
       if (isFinished) {
         // 終了
-        // 時間計測を停止
-        stopGameTimer();
-
-        // TODO: 時間を記録する
-        console.log('計測停止 時間', elapsedTime);
-
+        stopGameTimer(); // 時間計測を停止
+        updateScoreCo(elapsedTime); // スコア更新
         setCurrentNameCo('リザルト');
       } else if (isLastChar) {
         // 次の問題へ進む
@@ -81,11 +77,10 @@ function TypingGame(): JSX.Element {
   }, [setCurrentNameCo, userInput]);
 
   useEffect(() => {
-    if (!isStart) {
-      return;
+    if (isStart) {
+      // 時間計測を開始
+      startGameTimer();
     }
-    // 時間計測を開始
-    startGameTimer();
   }, [isStart]);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {

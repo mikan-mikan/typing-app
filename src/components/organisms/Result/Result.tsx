@@ -1,10 +1,13 @@
 import { useContext } from 'react';
 
 import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
+import { ScoreContext } from '@/contexts/ScoreContext';
 import { CurrentType } from '@/types';
 
-function Start(): JSX.Element {
+function Result(): JSX.Element {
   const { setCurrentNameCo } = useContext(CurrentScreenContext);
+
+  const { elapsedTimeCo, missCo, totalTimeCo, scoreObjectCo } = useContext(ScoreContext);
 
   function goToPageButton(page: CurrentType): void {
     setCurrentNameCo(page);
@@ -14,7 +17,15 @@ function Start(): JSX.Element {
     <div>
       <h2 className="text-4xl">リザルト画面</h2>
 
-      <div>
+      <div className="mt-10">
+        <p>経過時間: {elapsedTimeCo}秒</p>
+        <p>ミス回数: {missCo}回</p>
+        <p>合計秒数: {totalTimeCo}秒</p>
+        <p>スコア: {scoreObjectCo.score}</p>
+        <p>メッセージ: {scoreObjectCo.message}</p>
+      </div>
+
+      <div className="mt-10">
         <button
           type="button"
           onClick={() => {
@@ -38,4 +49,4 @@ function Start(): JSX.Element {
   );
 }
 
-export default Start;
+export default Result;

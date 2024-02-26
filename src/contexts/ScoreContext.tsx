@@ -1,16 +1,16 @@
 import React, { createContext, ReactNode, useCallback, useState } from 'react';
 
+import { judgeScore } from '@/functions/scores';
+import { SCORE_MISS_PENALTY } from '@/static/scores';
 import { ScoreMessageProps } from '@/types';
 
 interface ContextType {
   elapsedTimeCo: number;
-  setElapsedTimeCo: (value: number) => void;
   missCo: number;
   setMissCo: (value: number) => void;
   totalTimeCo: number;
-  setTotalTimeCo: (value: number) => void;
+  updateScoreCo: (value: number) => void;
   scoreObjectCo: ScoreMessageProps;
-  setScoreObjectCo: (value: ScoreMessageProps) => void;
   resetScoreContext: () => void;
 }
 interface ProviderProps {
@@ -19,16 +19,14 @@ interface ProviderProps {
 
 const ScoreContext = createContext<ContextType>({
   elapsedTimeCo: 0,
-  setElapsedTimeCo: () => {},
   missCo: 0,
   setMissCo: () => {},
   totalTimeCo: 0,
-  setTotalTimeCo: () => {},
+  updateScoreCo: () => {},
   scoreObjectCo: {
     score: '',
     message: '',
   },
-  setScoreObjectCo: () => {},
   resetScoreContext: () => {},
 });
 
@@ -56,17 +54,24 @@ const ScoreProvider = ({ children }: ProviderProps): JSX.Element => {
     setScoreObjectCo({ score: '', message: '' });
   }, []);
 
+  // 合計秒数の更新
+  const updateScoreCo = (elapsedTime: number): void => {
+    const totalTime = elapsedTime + missCo * SCORE_MISS_PENALTY; // ペナルティを含めた合計秒数
+    const messages = judgeScore(totalTime); // スコア判定
+    setTotalTimeCo(totalTime); // 合計秒数を更新
+    setElapsedTimeCo(elapsedTime); // 経過時間を更新
+    setScoreObjectCo(messages); // スコアの判定結果を更新
+  };
+
   return (
     <ScoreContext.Provider
       value={{
         elapsedTimeCo,
-        setElapsedTimeCo,
         missCo,
         setMissCo,
         totalTimeCo,
-        setTotalTimeCo,
+        updateScoreCo,
         scoreObjectCo,
-        setScoreObjectCo,
         resetScoreContext,
       }}
     >
