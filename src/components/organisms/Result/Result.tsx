@@ -4,7 +4,7 @@ import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 import { ScoreContext } from '@/contexts/ScoreContext';
 import { CurrentType } from '@/types';
 
-function Start(): JSX.Element {
+function Result(): JSX.Element {
   const { setCurrentNameCo } = useContext(CurrentScreenContext);
 
   const { elapsedTimeCo, missCo, totalTimeCo, scoreObjectCo } = useContext(ScoreContext);
@@ -49,4 +49,4 @@ function Start(): JSX.Element {
   );
 }
 
-export default Start;
+export default Result;
