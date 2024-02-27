@@ -9,6 +9,7 @@ import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 import { QuestionListContext } from '@/contexts/QuestionListContext';
 import { ScoreContext } from '@/contexts/ScoreContext';
 import { checkJa } from '@/functions/common';
+import { removeMatchingPrefix } from '@/functions/typingGame';
 import useGameTimer from '@/hooks/useGameTimer';
 
 function TypingGame(): JSX.Element {
@@ -97,15 +98,6 @@ function TypingGame(): JSX.Element {
 
   function handleCountdownFinished(): void {
     setIsStart(true);
-  }
-
-  // 入力された文字列とパターンを比較し、一致する部分を削除した文字列を返す
-  function removeMatchingPrefix(input: string, pattern: string): string {
-    let index = 0;
-    while (index < input.length && index < pattern.length && input[index] === pattern[index]) {
-      index++;
-    }
-    return input.substring(index);
   }
 
   return (
