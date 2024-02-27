@@ -12,11 +12,11 @@ import useGameTimer from '@/hooks/useGameTimer';
 function TypingGame(): JSX.Element {
   const { setCurrentNameCo } = useContext(CurrentScreenContext);
   const { courseCo, levelCo } = useContext(CourseLevelContext);
-  const [isStart, setIsStart] = useState(false); // スタートできるかどうか
-  const { elapsedTime, startGameTimer, stopGameTimer } = useGameTimer(); // ゲームの経過時間
   const { updateScoreCo } = useContext(ScoreContext);
+  const { elapsedTime, startGameTimer, stopGameTimer } = useGameTimer(); // ゲームの経過時間
   const { displayTextKanji, displayTextRomaji, userInput, isOk, prevUserInput, handleInputChange, isGameFinished } =
-    useGameLogic();
+    useGameLogic(); // 表示内容など
+  const [isStart, setIsStart] = useState(false); // スタートできるかどうか
 
   useEffect(() => {
     if (isGameFinished) {
