@@ -18,7 +18,7 @@ function TypingGame(): JSX.Element {
   const { elapsedTime, startGameTimer, stopGameTimer } = useGameTimer(); // ゲームの経過時間
   const { displayTextKanji, displayTextRomaji, userInput, isOk, prevUserInput, handleInputChange, isGameFinished } =
     useGameLogic(); // 表示内容など
-  const [isStart, setIsStart] = useState(false); // スタートできるかどうか
+  const [isGameStart, setIsGameStart] = useState(false); // スタートできるかどうか
 
   useEffect(() => {
     if (isGameFinished) {
@@ -29,19 +29,15 @@ function TypingGame(): JSX.Element {
   }, [isGameFinished]);
 
   useEffect(() => {
-    if (isStart) {
+    if (isGameStart) {
       // 時間計測を開始
       startGameTimer();
     }
-  }, [isStart]);
-
-  function handleCountdownFinished(): void {
-    setIsStart(true);
-  }
+  }, [isGameStart]);
 
   return (
     <>
-      {isStart ? (
+      {isGameStart ? (
         <div className="flex flex-col items-center justify-center" onKeyDown={handleKeyDown}>
           <p>
             難易度: {courseCo}, コース: {levelCo}
@@ -61,7 +57,11 @@ function TypingGame(): JSX.Element {
           {!isOk && <p className="text-red-400">Miss</p>}
         </div>
       ) : (
-        <CountDown onCountdownFinished={handleCountdownFinished} />
+        <CountDown
+          onCountdownFinished={() => {
+            setIsGameStart(true);
+          }}
+        />
       )}
     </>
   );
