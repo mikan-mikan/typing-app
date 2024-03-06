@@ -1,14 +1,7 @@
-import { useContext } from 'react';
-
-import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
-import { CurrentType } from '@/types';
+import useGoToPage from '@/hooks/useGoToPage';
 
 function Settings(): JSX.Element {
-  const { setCurrentNameCo } = useContext(CurrentScreenContext);
-
-  function goToPageButton(page: CurrentType): void {
-    setCurrentNameCo(page);
-  }
+  const { goToPage } = useGoToPage();
 
   return (
     <div>
@@ -21,7 +14,7 @@ function Settings(): JSX.Element {
           type="button"
           onClick={() => {
             // TODO: 遷移前の画面に戻る、仮でトップ画面に戻る
-            goToPageButton('トップ');
+            goToPage('トップ');
           }}
         >
           戻る

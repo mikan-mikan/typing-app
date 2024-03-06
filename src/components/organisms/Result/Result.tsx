@@ -1,17 +1,12 @@
 import { useContext } from 'react';
 
-import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 import { ScoreContext } from '@/contexts/ScoreContext';
-import { CurrentType } from '@/types';
+import useGoToPage from '@/hooks/useGoToPage';
 
 function Result(): JSX.Element {
-  const { setCurrentNameCo } = useContext(CurrentScreenContext);
+  const { goToPage } = useGoToPage();
 
   const { elapsedTimeCo, missCo, totalTimeCo, scoreObjectCo } = useContext(ScoreContext);
-
-  function goToPageButton(page: CurrentType): void {
-    setCurrentNameCo(page);
-  }
 
   return (
     <div>
@@ -29,7 +24,7 @@ function Result(): JSX.Element {
         <button
           type="button"
           onClick={() => {
-            goToPageButton('トップ');
+            goToPage('トップ');
           }}
         >
           TOPへ戻るボタン
@@ -39,7 +34,7 @@ function Result(): JSX.Element {
         <button
           type="button"
           onClick={() => {
-            goToPageButton('セレクト');
+            goToPage('セレクト');
           }}
         >
           コース・難易度 選択画面へ

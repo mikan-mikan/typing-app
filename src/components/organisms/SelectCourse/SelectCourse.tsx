@@ -1,38 +1,25 @@
 import { useContext } from 'react';
 
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
-import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
-import { QuestionListContext } from '@/contexts/QuestionListContext';
 import { ScoreContext } from '@/contexts/ScoreContext';
-import { selectQuestLists } from '@/functions/selectQuestLists';
-import type { CurrentType, SelectCourseType, SelectLevelType } from '@/types';
+import useGoToPage from '@/hooks/useGoToPage';
+import useUpdateQuestionList from '@/hooks/useUpdateQuestionList';
+import useUpdateSelect from '@/hooks/useUpdateSelect';
+import { COURSES_LIST, LEVELS_LIST } from '@/static';
 
 function SelectCourse(): JSX.Element {
-  const { setCurrentNameCo } = useContext(CurrentScreenContext);
-  const { courseCo, setCourseCo, levelCo, setLevelCo } = useContext(CourseLevelContext);
-  const { setQuestionListCo } = useContext(QuestionListContext);
+  const { goToPage } = useGoToPage();
+  const { updateQuestionList } = useUpdateQuestionList();
+  const { updateSelectCourse, updateSelectLevel } = useUpdateSelect();
+  const { courseCo, levelCo } = useContext(CourseLevelContext);
   const { resetScoreContext } = useContext(ScoreContext);
-  const courses: SelectCourseType[] = ['単語', '文章'];
-  const levels: SelectLevelType[] = ['易しい', '普通', '難しい'];
-
-  function goToPageButton(page: CurrentType): void {
-    setCurrentNameCo(page);
-  }
-
-  function updateSelectCourse(course: SelectCourseType): void {
-    setCourseCo(course);
-  }
-
-  function updateSelectLevel(level: SelectLevelType): void {
-    setLevelCo(level);
-  }
 
   return (
     <div>
       <h2 className="text-center text-4xl">コース・難易度 選択画面</h2>
 
       <div>
-        {courses.map((course, i) => (
+        {COURSES_LIST.map((course, i) => (
           <label key={i}>
             <input
               type="radio"
@@ -49,7 +36,7 @@ function SelectCourse(): JSX.Element {
       </div>
 
       <div>
-        {levels.map((level, i) => (
+        {LEVELS_LIST.map((level, i) => (
           <label key={i}>
             <input
               type="radio"
@@ -70,10 +57,9 @@ function SelectCourse(): JSX.Element {
           type="button"
           onClick={() => {
             // 問題作成後に、ゲーム画面へ遷移
-            const questionList = selectQuestLists(courseCo, levelCo);
-            setQuestionListCo(questionList);
+            updateQuestionList(courseCo, levelCo);
             resetScoreContext();
-            goToPageButton('ゲーム');
+            goToPage('ゲーム');
           }}
         >
           ゲームスタート
@@ -83,7 +69,7 @@ function SelectCourse(): JSX.Element {
         <button
           type="button"
           onClick={() => {
-            goToPageButton('トップ');
+            goToPage('トップ');
           }}
         >
           TOPに戻る
