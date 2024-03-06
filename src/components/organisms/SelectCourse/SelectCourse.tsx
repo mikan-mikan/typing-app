@@ -1,18 +1,17 @@
 import { useContext } from 'react';
 
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
-import { QuestionListContext } from '@/contexts/QuestionListContext';
 import { ScoreContext } from '@/contexts/ScoreContext';
-import { selectQuestLists } from '@/functions/selectQuestLists';
 import useGoToPage from '@/hooks/useGoToPage';
+import useUpdateQuestionList from '@/hooks/useUpdateQuestionList';
 import useUpdateSelect from '@/hooks/useUpdateSelect';
 import { COURSES_LIST, LEVELS_LIST } from '@/static';
 
 function SelectCourse(): JSX.Element {
   const { goToPage } = useGoToPage();
-  const { courseCo, levelCo } = useContext(CourseLevelContext);
+  const { updateQuestionList } = useUpdateQuestionList();
   const { updateSelectCourse, updateSelectLevel } = useUpdateSelect();
-  const { setQuestionListCo } = useContext(QuestionListContext);
+  const { courseCo, levelCo } = useContext(CourseLevelContext);
   const { resetScoreContext } = useContext(ScoreContext);
 
   return (
@@ -58,8 +57,7 @@ function SelectCourse(): JSX.Element {
           type="button"
           onClick={() => {
             // 問題作成後に、ゲーム画面へ遷移
-            const questionList = selectQuestLists(courseCo, levelCo);
-            setQuestionListCo(questionList);
+            updateQuestionList(courseCo, levelCo);
             resetScoreContext();
             goToPage('ゲーム');
           }}
