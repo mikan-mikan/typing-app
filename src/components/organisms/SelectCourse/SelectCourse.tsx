@@ -5,30 +5,22 @@ import { QuestionListContext } from '@/contexts/QuestionListContext';
 import { ScoreContext } from '@/contexts/ScoreContext';
 import { selectQuestLists } from '@/functions/selectQuestLists';
 import useGoToPage from '@/hooks/useGoToPage';
-import type { SelectCourseType, SelectLevelType } from '@/types';
+import useUpdateSelect from '@/hooks/useUpdateSelect';
+import { COURSES_LIST, LEVELS_LIST } from '@/static';
 
 function SelectCourse(): JSX.Element {
   const { goToPage } = useGoToPage();
-  const { courseCo, setCourseCo, levelCo, setLevelCo } = useContext(CourseLevelContext);
+  const { courseCo, levelCo } = useContext(CourseLevelContext);
+  const { updateSelectCourse, updateSelectLevel } = useUpdateSelect();
   const { setQuestionListCo } = useContext(QuestionListContext);
   const { resetScoreContext } = useContext(ScoreContext);
-  const courses: SelectCourseType[] = ['単語', '文章'];
-  const levels: SelectLevelType[] = ['易しい', '普通', '難しい'];
-
-  function updateSelectCourse(course: SelectCourseType): void {
-    setCourseCo(course);
-  }
-
-  function updateSelectLevel(level: SelectLevelType): void {
-    setLevelCo(level);
-  }
 
   return (
     <div>
       <h2 className="text-center text-4xl">コース・難易度 選択画面</h2>
 
       <div>
-        {courses.map((course, i) => (
+        {COURSES_LIST.map((course, i) => (
           <label key={i}>
             <input
               type="radio"
@@ -45,7 +37,7 @@ function SelectCourse(): JSX.Element {
       </div>
 
       <div>
-        {levels.map((level, i) => (
+        {LEVELS_LIST.map((level, i) => (
           <label key={i}>
             <input
               type="radio"
