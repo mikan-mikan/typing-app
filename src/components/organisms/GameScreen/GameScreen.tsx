@@ -12,6 +12,7 @@ import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 
 const GameScreen = (): JSX.Element => {
   const { currentNameCo } = useContext(CurrentScreenContext);
+
   return (
     <GameContainer>
       <div className="flex size-full flex-col items-center justify-center">

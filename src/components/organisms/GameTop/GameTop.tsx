@@ -1,14 +1,7 @@
-import { useContext } from 'react';
-
-import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
-import { CurrentType } from '@/types';
+import useGoToPage from '@/hooks/useGoToPage';
 
 function GameTop(): JSX.Element {
-  const { setCurrentNameCo } = useContext(CurrentScreenContext);
-
-  function goToPageButton(page: CurrentType): void {
-    setCurrentNameCo(page);
-  }
+  const { goToPage } = useGoToPage();
 
   return (
     <div>
@@ -18,7 +11,7 @@ function GameTop(): JSX.Element {
         <button
           type="button"
           onClick={() => {
-            goToPageButton('セレクト');
+            goToPage('セレクト');
           }}
         >
           スタートする
@@ -29,7 +22,7 @@ function GameTop(): JSX.Element {
         <button
           type="button"
           onClick={() => {
-            goToPageButton('セッティング');
+            goToPage('セッティング');
           }}
         >
           設定画面

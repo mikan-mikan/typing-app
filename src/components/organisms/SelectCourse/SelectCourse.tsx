@@ -1,23 +1,19 @@
 import { useContext } from 'react';
 
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
-import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 import { QuestionListContext } from '@/contexts/QuestionListContext';
 import { ScoreContext } from '@/contexts/ScoreContext';
 import { selectQuestLists } from '@/functions/selectQuestLists';
-import type { CurrentType, SelectCourseType, SelectLevelType } from '@/types';
+import useGoToPage from '@/hooks/useGoToPage';
+import type { SelectCourseType, SelectLevelType } from '@/types';
 
 function SelectCourse(): JSX.Element {
-  const { setCurrentNameCo } = useContext(CurrentScreenContext);
+  const { goToPage } = useGoToPage();
   const { courseCo, setCourseCo, levelCo, setLevelCo } = useContext(CourseLevelContext);
   const { setQuestionListCo } = useContext(QuestionListContext);
   const { resetScoreContext } = useContext(ScoreContext);
   const courses: SelectCourseType[] = ['単語', '文章'];
   const levels: SelectLevelType[] = ['易しい', '普通', '難しい'];
-
-  function goToPageButton(page: CurrentType): void {
-    setCurrentNameCo(page);
-  }
 
   function updateSelectCourse(course: SelectCourseType): void {
     setCourseCo(course);
@@ -73,7 +69,7 @@ function SelectCourse(): JSX.Element {
             const questionList = selectQuestLists(courseCo, levelCo);
             setQuestionListCo(questionList);
             resetScoreContext();
-            goToPageButton('ゲーム');
+            goToPage('ゲーム');
           }}
         >
           ゲームスタート
@@ -83,7 +79,7 @@ function SelectCourse(): JSX.Element {
         <button
           type="button"
           onClick={() => {
-            goToPageButton('トップ');
+            goToPage('トップ');
           }}
         >
           TOPに戻る

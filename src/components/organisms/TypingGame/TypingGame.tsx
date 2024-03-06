@@ -4,13 +4,13 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import CountDown from '@/components/parts/CountDown/CountDown';
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
-import { CurrentScreenContext } from '@/contexts/CurrentScreenContext';
 import { ScoreContext } from '@/contexts/ScoreContext';
 import useGameLogic from '@/hooks/useGameLogic';
 import useGameTimer from '@/hooks/useGameTimer';
+import useGoToPage from '@/hooks/useGoToPage';
 
 function TypingGame(): JSX.Element {
-  const { setCurrentNameCo } = useContext(CurrentScreenContext);
+  const { goToPage } = useGoToPage();
   const { courseCo, levelCo } = useContext(CourseLevelContext);
   const { updateScoreCo } = useContext(ScoreContext);
   const { elapsedTime, startGameTimer, stopGameTimer } = useGameTimer(); // ゲームの経過時間
@@ -22,7 +22,7 @@ function TypingGame(): JSX.Element {
     if (isGameFinished) {
       stopGameTimer(); // 時間計測を停止
       updateScoreCo(elapsedTime); // スコア更新
-      setCurrentNameCo('リザルト');
+      goToPage('リザルト');
     }
   }, [isGameFinished]);
 
@@ -35,7 +35,7 @@ function TypingGame(): JSX.Element {
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === 'Escape') {
-      setCurrentNameCo('セレクト');
+      goToPage('セレクト');
     }
   }
 
