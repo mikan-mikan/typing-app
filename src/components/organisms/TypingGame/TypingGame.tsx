@@ -8,9 +8,11 @@ import { ScoreContext } from '@/contexts/ScoreContext';
 import useGameLogic from '@/hooks/useGameLogic';
 import useGameTimer from '@/hooks/useGameTimer';
 import useGoToPage from '@/hooks/useGoToPage';
+import useHandleKeyDown from '@/hooks/useHandleKeyDown';
 
 function TypingGame(): JSX.Element {
   const { goToPage } = useGoToPage();
+  const { handleKeyDown } = useHandleKeyDown();
   const { courseCo, levelCo } = useContext(CourseLevelContext);
   const { updateScoreCo } = useContext(ScoreContext);
   const { elapsedTime, startGameTimer, stopGameTimer } = useGameTimer(); // ゲームの経過時間
@@ -32,12 +34,6 @@ function TypingGame(): JSX.Element {
       startGameTimer();
     }
   }, [isStart]);
-
-  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>): void {
-    if (event.key === 'Escape') {
-      goToPage('セレクト');
-    }
-  }
 
   function handleCountdownFinished(): void {
     setIsStart(true);
