@@ -2,6 +2,7 @@
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
+import Button from '@/components/parts/Button/Button';
 import CountDown from '@/components/parts/CountDown/CountDown';
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
 import { ScoreContext } from '@/contexts/ScoreContext';
@@ -89,14 +90,13 @@ function TypingGame(): JSX.Element {
             style={{ opacity: 0 }} // 非表示にする
           />
           {!isOk && <p className="text-red-400">Miss</p>}
-          <button
-            className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+          <Button
+            label="やめる"
             onClick={() => {
               goToPage('トップ'); // トップ画面に戻る
             }}
-          >
-            やめる
-          </button>
+            seType="back"
+          />
         </div>
       ) : (
         <CountDown
