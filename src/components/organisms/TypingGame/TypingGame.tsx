@@ -76,7 +76,7 @@ function TypingGame(): JSX.Element {
   };
 
   // 効果音再生関数
-  const playSE = (file: string) => {
+  const playSE = (file: string): void => {
     if (seCo) {
       const audio = new Audio(`/music/${file}`);
       audio.volume = seVolumeCo / 100;
@@ -104,6 +104,7 @@ function TypingGame(): JSX.Element {
     if (isGameStart && !isOk && prevUserInput) {
       playSE('se-typing-ng.mp3');
     }
+    // eslint-disable-next-line
   }, [isOk, prevUserInput, isGameStart]);
 
   // 1問終了時SE
@@ -113,6 +114,7 @@ function TypingGame(): JSX.Element {
       playSE('se-typing-end.mp3');
     }
     prevQuestionIndex.current = currentQuestionIndex;
+    // eslint-disable-next-line
   }, [currentQuestionIndex, isGameStart]);
 
   // 全問終了時SE（従来通り）
@@ -120,6 +122,7 @@ function TypingGame(): JSX.Element {
     if (isGameFinished) {
       playSE('se-typing-end.mp3');
     }
+    // eslint-disable-next-line
   }, [isGameFinished]);
 
   return (
