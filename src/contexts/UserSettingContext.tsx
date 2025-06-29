@@ -14,33 +14,92 @@ interface UserSettingProps {
   setSeVolumeCo: (value: number) => void;
 }
 
+const STORAGE_KEY = 'typing-app-user-settings';
+
+const defaultSettings = {
+  bgmCo: false,
+  seCo: false,
+  bgmVolumeCo: 65,
+  seVolumeCo: 65,
+};
+
+type Settings = typeof defaultSettings;
+
+const getInitialSettings = (): Settings => {
+  if (typeof window === 'undefined') {
+    return defaultSettings;
+  }
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed: unknown = JSON.parse(stored);
+      if (
+        typeof parsed === 'object' &&
+        parsed !== null &&
+        'bgmCo' in parsed &&
+        'seCo' in parsed &&
+        'bgmVolumeCo' in parsed &&
+        'seVolumeCo' in parsed
+      ) {
+        const obj = parsed as Partial<Settings>;
+        return {
+          bgmCo: typeof obj.bgmCo === 'boolean' ? obj.bgmCo : defaultSettings.bgmCo,
+          seCo: typeof obj.seCo === 'boolean' ? obj.seCo : defaultSettings.seCo,
+          bgmVolumeCo: typeof obj.bgmVolumeCo === 'number' ? obj.bgmVolumeCo : defaultSettings.bgmVolumeCo,
+          seVolumeCo: typeof obj.seVolumeCo === 'number' ? obj.seVolumeCo : defaultSettings.seVolumeCo,
+        };
+      }
+    }
+  } catch (e) {
+    // 何もしない（パース失敗時はデフォルト）
+  }
+  return defaultSettings;
+};
+
 const UserSettingContext = createContext<UserSettingProps>({
-  bgmCo: true,
+  bgmCo: false,
   setBgmCo: () => {},
-  seCo: true,
+  seCo: false,
   setSeCo: () => {},
-  bgmVolumeCo: 70,
+  bgmVolumeCo: 65,
   setBgmVolumeCo: () => {},
-  seVolumeCo: 70,
+  seVolumeCo: 65,
   setSeVolumeCo: () => {},
 });
 
 const UserSettingProvider = ({ children }: ProviderProps): JSX.Element => {
-  const [bgmCo, setBgmCo] = useState<boolean>(true);
-  const [seCo, setSeCo] = useState<boolean>(true);
-  const [bgmVolumeCo, setBgmVolumeCo] = useState<number>(70);
-  const [seVolumeCo, setSeVolumeCo] = useState<number>(70);
+  const initial = getInitialSettings();
+  const [settings, setSettings] = useState<Settings>(initial);
+
+  // ローカルストレージに保存（settingsが変わるたび）
+  React.useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  }, [settings]);
+
+  // setter
+  const setBgmCo = (value: boolean): void => {
+    setSettings((prev) => ({ ...prev, bgmCo: value }));
+  };
+  const setSeCo = (value: boolean): void => {
+    setSettings((prev) => ({ ...prev, seCo: value }));
+  };
+  const setBgmVolumeCo = (value: number): void => {
+    setSettings((prev) => ({ ...prev, bgmVolumeCo: value }));
+  };
+  const setSeVolumeCo = (value: number): void => {
+    setSettings((prev) => ({ ...prev, seVolumeCo: value }));
+  };
 
   return (
     <UserSettingContext.Provider
       value={{
-        bgmCo,
+        bgmCo: settings.bgmCo,
         setBgmCo,
-        seCo,
+        seCo: settings.seCo,
         setSeCo,
-        bgmVolumeCo,
+        bgmVolumeCo: settings.bgmVolumeCo,
         setBgmVolumeCo,
-        seVolumeCo,
+        seVolumeCo: settings.seVolumeCo,
         setSeVolumeCo,
       }}
     >
