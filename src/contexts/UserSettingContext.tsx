@@ -69,61 +69,37 @@ const UserSettingContext = createContext<UserSettingProps>({
 
 const UserSettingProvider = ({ children }: ProviderProps): JSX.Element => {
   const initial = getInitialSettings();
-  const [bgmCo, setBgmCoState] = useState<boolean>(initial.bgmCo);
-  const [seCo, setSeCoState] = useState<boolean>(initial.seCo);
-  const [bgmVolumeCo, setBgmVolumeCoState] = useState<number>(initial.bgmVolumeCo);
-  const [seVolumeCo, setSeVolumeCoState] = useState<number>(initial.seVolumeCo);
+  const [settings, setSettings] = useState<Settings>(initial);
 
-  // ローカルストレージに保存
-  const saveSettings = (settings: Partial<Settings>): void => {
-    const newSettings: Settings = {
-      bgmCo,
-      seCo,
-      bgmVolumeCo,
-      seVolumeCo,
-      ...settings,
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
-  };
-
-  // 初回マウント時、ローカルストレージに値がなければ初期値を保存
+  // ローカルストレージに保存（settingsが変わるたび）
   React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (!stored) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultSettings));
-      }
-    }
-  }, []);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  }, [settings]);
 
-  // setterをラップしてローカルストレージも更新
+  // setter
   const setBgmCo = (value: boolean): void => {
-    setBgmCoState(value);
-    saveSettings({ bgmCo: value });
+    setSettings((prev) => ({ ...prev, bgmCo: value }));
   };
   const setSeCo = (value: boolean): void => {
-    setSeCoState(value);
-    saveSettings({ seCo: value });
+    setSettings((prev) => ({ ...prev, seCo: value }));
   };
   const setBgmVolumeCo = (value: number): void => {
-    setBgmVolumeCoState(value);
-    saveSettings({ bgmVolumeCo: value });
+    setSettings((prev) => ({ ...prev, bgmVolumeCo: value }));
   };
   const setSeVolumeCo = (value: number): void => {
-    setSeVolumeCoState(value);
-    saveSettings({ seVolumeCo: value });
+    setSettings((prev) => ({ ...prev, seVolumeCo: value }));
   };
 
   return (
     <UserSettingContext.Provider
       value={{
-        bgmCo,
+        bgmCo: settings.bgmCo,
         setBgmCo,
-        seCo,
+        seCo: settings.seCo,
         setSeCo,
-        bgmVolumeCo,
+        bgmVolumeCo: settings.bgmVolumeCo,
         setBgmVolumeCo,
-        seVolumeCo,
+        seVolumeCo: settings.seVolumeCo,
         setSeVolumeCo,
       }}
     >
