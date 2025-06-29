@@ -20,18 +20,18 @@ function Settings(): JSX.Element {
 
       <p>BGM</p>
       <div>
-        {SETTING_RADIO_TYPE.map((name, i) => (
-          <label key={i}>
+        {SETTING_RADIO_TYPE.map((type) => (
+          <label key={type}>
             <input
               type="radio"
               name={SETTING_NAME[0]}
-              value={SETTING_RADIO_TYPE[i]}
-              defaultChecked={SETTING_RADIO_TYPE[i] === 'on' ? bgmCo : !bgmCo}
+              value={type}
+              checked={type === 'on' ? bgmCo : !bgmCo}
               onChange={() => {
-                setBgmCo(!bgmCo);
+                setBgmCo(type === 'on');
               }}
             />
-            {SETTING_RADIO_TYPE[i].toUpperCase()}
+            {type.toUpperCase()}
           </label>
         ))}
       </div>
@@ -57,18 +57,18 @@ function Settings(): JSX.Element {
 
       <p>SE</p>
       <div>
-        {SETTING_RADIO_TYPE.map((name, i) => (
-          <label key={i}>
+        {SETTING_RADIO_TYPE.map((type) => (
+          <label key={type}>
             <input
               type="radio"
               name={SETTING_NAME[1]}
-              value={SETTING_RADIO_TYPE[i]}
-              defaultChecked={SETTING_RADIO_TYPE[i] === 'on' ? seCo : !seCo}
+              value={type}
+              checked={type === 'on' ? seCo : !seCo}
               onChange={() => {
-                setSeCo(!seCo);
+                setSeCo(type === 'on');
               }}
             />
-            {SETTING_RADIO_TYPE[i].toUpperCase()}
+            {type.toUpperCase()}
           </label>
         ))}
       </div>
