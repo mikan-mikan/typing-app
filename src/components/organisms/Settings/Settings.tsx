@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 
+import Button from '@/components/parts/Button/Button';
 import { UserSettingContext } from '@/contexts/UserSettingContext';
 import useGoToPage from '@/hooks/useGoToPage';
 import { SETTING_NAME, SETTING_RADIO_TYPE, SETTING_VOLUME } from '@/static/settings';
@@ -92,15 +93,12 @@ function Settings(): JSX.Element {
       <hr />
 
       <div>
-        <button
-          type="button"
+        <Button
+          label="戻る"
           onClick={() => {
-            // TODO: 遷移前の画面に戻る、仮でトップ画面に戻る
             goToPage('トップ');
           }}
-        >
-          戻る
-        </button>
+        />
       </div>
     </div>
   );

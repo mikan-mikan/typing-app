@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 
+import Button from '@/components/parts/Button/Button';
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
 import { ScoreContext } from '@/contexts/ScoreContext';
 import useGoToPage from '@/hooks/useGoToPage';
@@ -53,27 +54,22 @@ function SelectCourse(): JSX.Element {
       </div>
 
       <div>
-        <button
-          type="button"
+        <Button
+          label="ゲームスタート"
           onClick={() => {
-            // 問題作成後に、ゲーム画面へ遷移
             updateQuestionList(courseCo, levelCo);
             resetScoreContext();
             goToPage('ゲーム');
           }}
-        >
-          ゲームスタート
-        </button>
+        />
       </div>
       <div>
-        <button
-          type="button"
+        <Button
+          label="TOPに戻る"
           onClick={() => {
             goToPage('トップ');
           }}
-        >
-          TOPに戻る
-        </button>
+        />
       </div>
     </div>
   );

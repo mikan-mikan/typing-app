@@ -5,7 +5,13 @@ import Footer from './Footer';
 const meta = {
   title: 'Organisms/Footer',
   component: Footer,
-  parameters: {},
+  parameters: {
+    docs: {
+      description: {
+        component: 'ページのフッター部分を表示するコンポーネント。著作権情報やリンクを含むことができます。',
+      },
+    },
+  },
   tags: ['autodocs'],
   argTypes: {},
 } satisfies Meta<typeof Footer>;

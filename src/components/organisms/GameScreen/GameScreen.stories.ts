@@ -7,6 +7,11 @@ const meta = {
   component: GameScreen,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: 'ゲーム画面のコンテナコンポーネント。子要素を受け取り、ゲームの主要なUIを表示します。',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

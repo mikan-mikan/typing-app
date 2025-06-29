@@ -7,6 +7,11 @@ const meta = {
   component: Result,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: 'ゲーム結果を表示するコンポーネント。スコアや正解率などの情報を提供します。',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {},
