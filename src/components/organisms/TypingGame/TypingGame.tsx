@@ -43,7 +43,7 @@ function TypingGame(): JSX.Element {
   useEffect(() => {
     const handleGlobalClick = (e: MouseEvent): void => {
       const target = e.target as HTMLElement;
-      // 戻るボタン以外をクリックした場合にフォーカスを設定
+      // 「やめる」ボタン以外をクリックした場合にフォーカスを設定
       if (!target.closest('button') && inputRef.current) {
         inputRef.current.focus();
       }
@@ -56,17 +56,20 @@ function TypingGame(): JSX.Element {
     };
   }, []);
 
+  const handleFocusOnClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+    const target = e.target as HTMLElement;
+    // 「やめる」ボタン以外をクリックした場合にフォーカスを設定
+    if (!target.closest('button') && inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   return (
     <>
       {isGameStart ? (
         <div
           className="flex flex-col items-center justify-center"
-          onClick={(e) => {
-            // 戻るボタン以外をクリックした場合にフォーカスを設定
-            if (e.target instanceof HTMLElement && !e.target.closest('button')) {
-              inputRef.current?.focus();
-            }
-          }}
+          onClick={handleFocusOnClick} // 共通関数を使用
         >
           <p>
             難易度: {courseCo}, コース: {levelCo}
