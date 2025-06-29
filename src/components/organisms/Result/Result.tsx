@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 
+import Button from '@/components/parts/Button/Button';
 import { ScoreContext } from '@/contexts/ScoreContext';
 import useGoToPage from '@/hooks/useGoToPage';
 
@@ -21,24 +22,20 @@ function Result(): JSX.Element {
       </div>
 
       <div className="mt-10">
-        <button
-          type="button"
+        <Button
+          label="TOPへ戻る"
           onClick={() => {
             goToPage('トップ');
           }}
-        >
-          TOPへ戻るボタン
-        </button>
+        />
       </div>
       <div>
-        <button
-          type="button"
+        <Button
+          label="コース・難易度 選択画面へ"
           onClick={() => {
             goToPage('セレクト');
           }}
-        >
-          コース・難易度 選択画面へ
-        </button>
+        />
       </div>
     </div>
   );

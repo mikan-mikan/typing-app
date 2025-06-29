@@ -1,3 +1,4 @@
+import Button from '@/components/parts/Button/Button';
 import useGoToPage from '@/hooks/useGoToPage';
 
 function GameTop(): JSX.Element {
@@ -8,25 +9,21 @@ function GameTop(): JSX.Element {
       <h2 className="text-center text-4xl">スタート画面</h2>
 
       <div>
-        <button
-          type="button"
+        <Button
+          label="スタートする"
           onClick={() => {
             goToPage('セレクト');
           }}
-        >
-          スタートする
-        </button>
+        />
       </div>
 
       <div>
-        <button
-          type="button"
+        <Button
+          label="設定画面"
           onClick={() => {
             goToPage('セッティング');
           }}
-        >
-          設定画面
-        </button>
+        />
       </div>
     </div>
   );

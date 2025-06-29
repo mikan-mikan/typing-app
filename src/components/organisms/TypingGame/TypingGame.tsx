@@ -8,18 +8,16 @@ import { ScoreContext } from '@/contexts/ScoreContext';
 import useGameLogic from '@/hooks/useGameLogic';
 import useGameTimer from '@/hooks/useGameTimer';
 import useGoToPage from '@/hooks/useGoToPage';
-import useHandleKeyDown from '@/hooks/useHandleKeyDown';
 
 function TypingGame(): JSX.Element {
-  const inputRef = useRef<HTMLInputElement>(null); // 入力欄の参照を作成
   const { goToPage } = useGoToPage();
-  const { handleKeyDown } = useHandleKeyDown();
   const { courseCo, levelCo } = useContext(CourseLevelContext);
   const { updateScoreCo } = useContext(ScoreContext);
   const { elapsedTime, startGameTimer, stopGameTimer } = useGameTimer(); // ゲームの経過時間
   const { displayTextKanji, displayTextRomaji, userInput, isOk, prevUserInput, handleInputChange, isGameFinished } =
     useGameLogic(); // 表示内容など
   const [isGameStart, setIsGameStart] = useState(false); // スタートできるかどうか
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isGameFinished) {
@@ -27,14 +25,14 @@ function TypingGame(): JSX.Element {
       updateScoreCo(elapsedTime); // スコア更新
       goToPage('リザルト');
     }
-  }, [isGameFinished]);
+  }, [isGameFinished, stopGameTimer, updateScoreCo, elapsedTime, goToPage]);
 
   useEffect(() => {
     if (isGameStart) {
       // 時間計測を開始
       startGameTimer();
     }
-  }, [isGameStart]);
+  }, [isGameStart, startGameTimer]);
 
   useEffect(() => {
     if (isGameStart && inputRef.current) {
@@ -42,10 +40,34 @@ function TypingGame(): JSX.Element {
     }
   }, [isGameStart]);
 
+  useEffect(() => {
+    const handleGlobalClick = (e: MouseEvent): void => {
+      const target = e.target as HTMLElement;
+      // 戻るボタン以外をクリックした場合にフォーカスを設定
+      if (!target.closest('button') && inputRef.current) {
+        inputRef.current.focus();
+      }
+    };
+
+    document.addEventListener('click', handleGlobalClick);
+
+    return () => {
+      document.removeEventListener('click', handleGlobalClick);
+    };
+  }, []);
+
   return (
     <>
       {isGameStart ? (
-        <div className="flex flex-col items-center justify-center" onKeyDown={handleKeyDown}>
+        <div
+          className="flex flex-col items-center justify-center"
+          onClick={(e) => {
+            // 戻るボタン以外をクリックした場合にフォーカスを設定
+            if (e.target instanceof HTMLElement && !e.target.closest('button')) {
+              inputRef.current?.focus();
+            }
+          }}
+        >
           <p>
             難易度: {courseCo}, コース: {levelCo}
           </p>
@@ -61,8 +83,17 @@ function TypingGame(): JSX.Element {
             value={userInput}
             onChange={handleInputChange}
             placeholder="テキスト入力エリア"
+            style={{ opacity: 0 }} // 非表示にする
           />
           {!isOk && <p className="text-red-400">Miss</p>}
+          <button
+            className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+            onClick={() => {
+              goToPage('トップ'); // トップ画面に戻る
+            }}
+          >
+            戻る
+          </button>
         </div>
       ) : (
         <CountDown
