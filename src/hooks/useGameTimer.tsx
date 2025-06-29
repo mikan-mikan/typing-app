@@ -34,6 +34,7 @@ const useGameTimer = (): TimerProps => {
 
   const stopGameTimer = useCallback(() => {
     setIsActive(false);
+    setElapsedTime(0); // 経過時間をリセット
   }, []);
 
   return { elapsedTime, startGameTimer, stopGameTimer };

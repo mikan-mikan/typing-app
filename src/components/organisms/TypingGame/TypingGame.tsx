@@ -21,8 +21,8 @@ function TypingGame(): JSX.Element {
 
   useEffect(() => {
     if (isGameFinished) {
+      updateScoreCo(elapsedTime); // 保存した値でスコア更新
       stopGameTimer(); // 時間計測を停止
-      updateScoreCo(elapsedTime); // スコア更新
       goToPage('リザルト');
     }
   }, [isGameFinished, stopGameTimer, updateScoreCo, elapsedTime, goToPage]);
@@ -92,7 +92,7 @@ function TypingGame(): JSX.Element {
               goToPage('トップ'); // トップ画面に戻る
             }}
           >
-            戻る
+            やめる
           </button>
         </div>
       ) : (
