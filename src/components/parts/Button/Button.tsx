@@ -9,11 +9,12 @@ type ButtonProps = {
 };
 
 const Button = ({ label, onClick, seType = 'next' }: ButtonProps): JSX.Element => {
-  const { seCo } = useContext(UserSettingContext);
+  const { seCo, seVolumeCo } = useContext(UserSettingContext);
 
   const handleClick = (): void => {
     if (seCo) {
       const audio = new Audio(`/music/se-button-${seType}.mp3`);
+      audio.volume = seVolumeCo / 100;
       void audio.play();
     }
     onClick();
