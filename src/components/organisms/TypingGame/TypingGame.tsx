@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import CountDown from '@/components/parts/CountDown/CountDown';
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
@@ -11,6 +11,7 @@ import useGoToPage from '@/hooks/useGoToPage';
 import useHandleKeyDown from '@/hooks/useHandleKeyDown';
 
 function TypingGame(): JSX.Element {
+  const inputRef = useRef<HTMLInputElement>(null); // 入力欄の参照を作成
   const { goToPage } = useGoToPage();
   const { handleKeyDown } = useHandleKeyDown();
   const { courseCo, levelCo } = useContext(CourseLevelContext);
@@ -35,6 +36,12 @@ function TypingGame(): JSX.Element {
     }
   }, [isGameStart]);
 
+  useEffect(() => {
+    if (isGameStart && inputRef.current) {
+      inputRef.current.focus(); // ゲーム開始時に入力欄にフォーカスを設定
+    }
+  }, [isGameStart]);
+
   return (
     <>
       {isGameStart ? (
@@ -48,6 +55,7 @@ function TypingGame(): JSX.Element {
             {displayTextRomaji}
           </p>
           <input
+            ref={inputRef} // 入力欄にrefを設定
             className="mt-4"
             type="text"
             value={userInput}
