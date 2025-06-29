@@ -6,6 +6,7 @@ import Button from '@/components/parts/Button/Button';
 import CountDown from '@/components/parts/CountDown/CountDown';
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
 import { ScoreContext } from '@/contexts/ScoreContext';
+import { UserSettingContext } from '@/contexts/UserSettingContext';
 import useGameLogic from '@/hooks/useGameLogic';
 import useGameTimer from '@/hooks/useGameTimer';
 import useGoToPage from '@/hooks/useGoToPage';
@@ -14,9 +15,18 @@ function TypingGame(): JSX.Element {
   const { goToPage } = useGoToPage();
   const { courseCo, levelCo } = useContext(CourseLevelContext);
   const { updateScoreCo } = useContext(ScoreContext);
+  const { seCo, seVolumeCo } = useContext(UserSettingContext);
   const { elapsedTime, startGameTimer, stopGameTimer } = useGameTimer(); // ゲームの経過時間
-  const { displayTextKanji, displayTextRomaji, userInput, isOk, prevUserInput, handleInputChange, isGameFinished } =
-    useGameLogic(); // 表示内容など
+  const {
+    displayTextKanji,
+    displayTextRomaji,
+    userInput,
+    isOk,
+    prevUserInput,
+    handleInputChange,
+    isGameFinished,
+    currentQuestionIndex,
+  } = useGameLogic(); // 表示内容など
   const [isGameStart, setIsGameStart] = useState(false); // スタートできるかどうか
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -64,6 +74,53 @@ function TypingGame(): JSX.Element {
       inputRef.current.focus();
     }
   };
+
+  // 効果音再生関数
+  const playSE = (file: string) => {
+    if (seCo) {
+      const audio = new Audio(`/music/${file}`);
+      audio.volume = seVolumeCo / 100;
+      void audio.play();
+    }
+  };
+
+  // 正解時SE
+  // 最後の文字（isLastChar）でなければse-typing-okを鳴らす
+  const [isLastChar, setIsLastChar] = useState(false);
+  useEffect(() => {
+    // isLastChar判定
+    setIsLastChar(displayTextRomaji.length === 0 && userInput === '');
+  }, [displayTextRomaji, userInput]);
+
+  useEffect(() => {
+    if (isGameStart && isOk && prevUserInput && userInput === '' && !isLastChar) {
+      playSE('se-typing-ok.mp3');
+    }
+    // eslint-disable-next-line
+  }, [isOk, prevUserInput, userInput, isGameStart, isLastChar]);
+
+  // ミス時SE
+  useEffect(() => {
+    if (isGameStart && !isOk && prevUserInput) {
+      playSE('se-typing-ng.mp3');
+    }
+  }, [isOk, prevUserInput, isGameStart]);
+
+  // 1問終了時SE
+  const prevQuestionIndex = useRef<number>(-1); // 初期値を-1に
+  useEffect(() => {
+    if (isGameStart && prevQuestionIndex.current !== currentQuestionIndex) {
+      playSE('se-typing-end.mp3');
+    }
+    prevQuestionIndex.current = currentQuestionIndex;
+  }, [currentQuestionIndex, isGameStart]);
+
+  // 全問終了時SE（従来通り）
+  useEffect(() => {
+    if (isGameFinished) {
+      playSE('se-typing-end.mp3');
+    }
+  }, [isGameFinished]);
 
   return (
     <>
