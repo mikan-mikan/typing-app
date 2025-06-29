@@ -7,6 +7,11 @@ const meta = {
   component: SelectCourse,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: 'コース選択画面のコンポーネント。ユーザーがゲームのコースを選択するためのUIを提供します。',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {},

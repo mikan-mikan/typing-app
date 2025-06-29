@@ -1,12 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react';
-
 import TypingGame from './TypingGame';
 
-const meta = {
+const meta: Meta<typeof TypingGame> = {
   title: 'Organisms/TypingGame',
   component: TypingGame,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: 'タイピングゲームのメイン画面。ユーザーがタイピングを行うためのUIを提供します。',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {},

@@ -7,6 +7,11 @@ const meta = {
   component: GameTop,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: 'ゲームのトップ画面を表示するコンポーネント。ゲーム開始前の情報や操作を提供します。',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {},

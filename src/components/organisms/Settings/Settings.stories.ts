@@ -7,6 +7,11 @@ const meta = {
   component: Settings,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: 'ユーザー設定画面のコンポーネント。ゲームの設定やユーザーの好みに応じたオプションを提供します。',
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {},
