@@ -69,6 +69,7 @@ function SelectCourse(): JSX.Element {
           onClick={() => {
             goToPage('トップ');
           }}
+          seType="back"
         />
       </div>
     </div>
