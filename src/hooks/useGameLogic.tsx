@@ -15,6 +15,7 @@ type Props = {
   isGameFinished: boolean;
   setIsGameFinished: (isGameFinished: boolean) => void;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  currentQuestionIndex: number;
 };
 
 // TODO: useMemoを使って最適化できないか検討する
@@ -95,6 +96,7 @@ const useGameLogic = (): Props => {
     handleInputChange,
     isGameFinished,
     setIsGameFinished,
+    currentQuestionIndex,
   };
 };
 

@@ -2,9 +2,11 @@
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
+import Button from '@/components/parts/Button/Button';
 import CountDown from '@/components/parts/CountDown/CountDown';
 import { CourseLevelContext } from '@/contexts/CourseLevelContext';
 import { ScoreContext } from '@/contexts/ScoreContext';
+import { UserSettingContext } from '@/contexts/UserSettingContext';
 import useGameLogic from '@/hooks/useGameLogic';
 import useGameTimer from '@/hooks/useGameTimer';
 import useGoToPage from '@/hooks/useGoToPage';
@@ -13,9 +15,18 @@ function TypingGame(): JSX.Element {
   const { goToPage } = useGoToPage();
   const { courseCo, levelCo } = useContext(CourseLevelContext);
   const { updateScoreCo } = useContext(ScoreContext);
+  const { seCo, seVolumeCo } = useContext(UserSettingContext);
   const { elapsedTime, startGameTimer, stopGameTimer } = useGameTimer(); // ゲームの経過時間
-  const { displayTextKanji, displayTextRomaji, userInput, isOk, prevUserInput, handleInputChange, isGameFinished } =
-    useGameLogic(); // 表示内容など
+  const {
+    displayTextKanji,
+    displayTextRomaji,
+    userInput,
+    isOk,
+    prevUserInput,
+    handleInputChange,
+    isGameFinished,
+    currentQuestionIndex,
+  } = useGameLogic(); // 表示内容など
   const [isGameStart, setIsGameStart] = useState(false); // スタートできるかどうか
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -64,6 +75,56 @@ function TypingGame(): JSX.Element {
     }
   };
 
+  // 効果音再生関数
+  const playSE = (file: string): void => {
+    if (seCo) {
+      const audio = new Audio(`/music/${file}`);
+      audio.volume = seVolumeCo / 100;
+      void audio.play();
+    }
+  };
+
+  // 正解時SE
+  // 最後の文字（isLastChar）でなければse-typing-okを鳴らす
+  const [isLastChar, setIsLastChar] = useState(false);
+  useEffect(() => {
+    // isLastChar判定
+    setIsLastChar(displayTextRomaji.length === 0 && userInput === '');
+  }, [displayTextRomaji, userInput]);
+
+  useEffect(() => {
+    if (isGameStart && isOk && prevUserInput && userInput === '' && !isLastChar) {
+      playSE('se-typing-ok.mp3');
+    }
+    // eslint-disable-next-line
+  }, [isOk, prevUserInput, userInput, isGameStart, isLastChar]);
+
+  // ミス時SE
+  useEffect(() => {
+    if (isGameStart && !isOk && prevUserInput) {
+      playSE('se-typing-ng.mp3');
+    }
+    // eslint-disable-next-line
+  }, [isOk, prevUserInput, isGameStart]);
+
+  // 1問終了時SE
+  const prevQuestionIndex = useRef<number>(-1); // 初期値を-1に
+  useEffect(() => {
+    if (isGameStart && prevQuestionIndex.current !== currentQuestionIndex) {
+      playSE('se-typing-end.mp3');
+    }
+    prevQuestionIndex.current = currentQuestionIndex;
+    // eslint-disable-next-line
+  }, [currentQuestionIndex, isGameStart]);
+
+  // 全問終了時SE（従来通り）
+  useEffect(() => {
+    if (isGameFinished) {
+      playSE('se-typing-end.mp3');
+    }
+    // eslint-disable-next-line
+  }, [isGameFinished]);
+
   return (
     <>
       {isGameStart ? (
@@ -89,14 +150,13 @@ function TypingGame(): JSX.Element {
             style={{ opacity: 0 }} // 非表示にする
           />
           {!isOk && <p className="text-red-400">Miss</p>}
-          <button
-            className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+          <Button
+            label="やめる"
             onClick={() => {
               goToPage('トップ'); // トップ画面に戻る
             }}
-          >
-            やめる
-          </button>
+            seType="back"
+          />
         </div>
       ) : (
         <CountDown
