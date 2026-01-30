@@ -8,12 +8,12 @@
 
 ### Nodeバージョン
 
-v20.11.0
+v24.13.0
 
 ### インストール
 
 ```bash
-npm run i
+npm i
 ```
 
 ### 起動
@@ -22,10 +22,4 @@ npm run i
 
 ```bash
 npm run dev
-```
-
-#### Storybook
-
-```bash
-npm run storybook
 ```
